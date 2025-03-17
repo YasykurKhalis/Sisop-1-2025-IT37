@@ -142,9 +142,11 @@ else
  exit 1
 fi
 ```
+Penjelasan:
 
+Sama seperti tadi, cek apabila directory data dan file player.csv sudah ada. Kemudian, command meminta input email (read -p) dan password (read -s -p, agar input password tersembunyi). Setelah itu, command mencari kombinasi email dan password dalam file CSV menggunakan grep -q "^$email,.*,$password$" "$path". Jika ditemukan, login dianggap berhasil dan menampilkan "Berhasil login" dengan kode keluar 0; jika tidak, login gagal dan keluar dengan kode 1.
 
-b. 
+b. Tambahkan pada command agar format email yang dimasukkan benar dan password minimal 8 karakter, 1 huruf kecil, 1 huruf besar, dan 1 angka:
 
 isi file register.sh:
 ```bash
@@ -174,7 +176,7 @@ echo "$email,$username,$password" >> "$path"
 echo "Registrasi berhasil"
 exit 0
 ```
-c.
+c. Menjadikan sistem register agar tidak menambahkan email yang sudah ada pada data:
 
 isi file register.sh:
 ```bash
@@ -209,7 +211,8 @@ echo "$email,$username,$password" >> "$path"
 echo "Registrasi berhasil"
 exit 0
 ```
-d.
+d. Meng-hash password agar tidak gampang dilihat:
+
 isi file register.sh:
 ```bash
 #!/bin/bash
