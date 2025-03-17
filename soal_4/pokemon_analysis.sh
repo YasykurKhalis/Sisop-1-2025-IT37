@@ -18,7 +18,7 @@ then
   if [ -z "$3" ]
   then
     echo " "
-    echo "Error: argumemt is empty"
+    echo "Error: argument is empty"
     exit 1
   fi
     echo " "
@@ -73,7 +73,7 @@ then
   if [ -z "$3" ]
 then
   echo " "
-  echo -e "Error: argument is empty."
+  echo -e "Error: argument is empty"
 exit 1
   fi
 
