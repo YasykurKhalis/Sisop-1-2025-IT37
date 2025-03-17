@@ -108,14 +108,17 @@ path="./data/player.csv"
 mkdir -p data
 touch "$path"
 
-email=$1	
-username=$2
-password=$3
+read -p "Masukkan email: " email
+read -p "Masukkan username: " username
+read -s -p "Masukkan password: " password
+echo
 
 echo "$email,$username,$password" >> "$path"
 echo "Registrasi berhasil"
 exit 0
 ```
+Penjelasan:
+Melakukan registrasi player dengan menyimpan data ke dalam file player.csv. Pertama, command memastikan bahwa direktori data sudah ada dengan perintah mkdir -p data, lalu membuat file player.csv jika belum ada menggunakan touch "$path". Setelah itu, command mengambil tiga argumen input (email, username, dan password) dari command line, lalu menuliskannya ke dalam file player.csv dalam format CSV (email,username,password). Command menampilkan "Registrasi berhasil" jika format benar.
 
 
 isi file login.sh:
@@ -140,7 +143,8 @@ fi
 ```
 
 
-2b. 
+b. 
+
 isi file register.sh:
 ```bash
 #!/bin/bash
@@ -150,9 +154,10 @@ path="./data/player.csv"
 mkdir -p data
 touch "$path"
 
-email=$1
-username=$2
-password=$3
+read -p "Masukkan email: " email
+read -p "Masukkan username: " username
+read -s -p "Masukkan password: " password
+echo
 
 if ! [[ "$email" =~ ^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$ ]]; then
     echo "Format email invalid"
@@ -168,9 +173,8 @@ echo "$email,$username,$password" >> "$path"
 echo "Registrasi berhasil"
 exit 0
 ```
+c.
 
-
-2c.
 isi file register.sh:
 ```bash
 #!/bin/bash
@@ -180,9 +184,10 @@ path="./data/player.csv"
 mkdir -p data
 touch "$path"
 
-email=$1
-username=$2
-password=$3
+read -p "Masukkan email: " email
+read -p "Masukkan username: " username
+read -s -p "Masukkan password: " password
+echo
 
 if ! [[ "$email" =~ ^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$ ]]; then
  echo "Format email invalid"
@@ -203,9 +208,7 @@ echo "$email,$username,$password" >> "$path"
 echo "Registrasi berhasil"
 exit 0
 ```
-
-
-2d.
+d.
 isi file register.sh:
 ```bash
 #!/bin/bash
@@ -215,9 +218,10 @@ path="./data/player.csv"
 mkdir -p data
 touch "$path"
 
-email=$1
-username=$2
-password=$3
+read -p "Masukkan email: " email
+read -p "Masukkan username: " username
+read -s -p "Masukkan password: " password
+echo
 
 if ! [[ "$email" =~ ^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$ ]]; then
  echo "Format email invalid"
@@ -250,8 +254,8 @@ path="./data/player.csv"
 mkdir -p data
 touch "$path"
 
-email=$1
-password=$2
+read -p "Masukkan email: " email
+read -s -p "Masukkan password: " password
 
 hashed_password=$(echo "$password" | sha256sum | awk '{print $1}')
 
