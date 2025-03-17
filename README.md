@@ -99,6 +99,170 @@ a. Buat file register.sh dan login.sh lalu ganti izin akses agar file bisa dieks
 ```bash
 touch register.sh && touch login.sh && chmod +x register.sh && chmod +x login.sh
 ```
+Isi file register.sh:
+```bash
+#!/bin/bash
+
+path="./data/player.csv"
+
+mkdir -p data
+touch "$path"
+
+email=$1	
+username=$2
+password=$3
+
+echo "$email,$username,$password" >> "$path"
+echo "Registrasi berhasil"
+exit 0
+```
+
+
+isi file login.sh:
+```bash
+#!/bin/bash
+
+path="./data/player.csv"
+
+mkdir -p data
+touch "$path"
+
+read -p "Masukkan email: " email
+read -s -p "Masukkan password: " password
+
+if grep -q "^$email,.*,$password$" "$path"; then
+ echo "Berhasil login"
+ exit 0
+else
+ echo "Gagal login"
+ exit 1
+fi
+```
+
+
+2b. 
+isi file register.sh:
+```bash
+#!/bin/bash
+
+path="./data/player.csv"
+
+mkdir -p data
+touch "$path"
+
+email=$1
+username=$2
+password=$3
+
+if ! [[ "$email" =~ ^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+$ ]]; then
+    echo "Format email invalid"
+    exit 1
+fi
+
+if [[ ${#password} -lt 8 || ! "$password" =~ [a-z] || ! "$password" =~ [A-Z] || ! "$password" =~ [0-9] ]]; then
+    echo "Password minimal 8 karakter, 1 huruf kecil, 1 huruf besar, dan 1 angka"
+    exit 1
+fi
+
+echo "$email,$username,$password" >> "$path"
+echo "Registrasi berhasil"
+exit 0
+```
+
+
+2c.
+isi file register.sh:
+```bash
+#!/bin/bash
+
+path="./data/player.csv"
+
+mkdir -p data
+touch "$path"
+
+email=$1
+username=$2
+password=$3
+
+if ! [[ "$email" =~ ^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$ ]]; then
+ echo "Format email invalid"
+ exit 1
+fi
+
+if grep -q "^$email," "$path"; then
+ echo "Email sudah terdaftar"
+ exit 1
+fi
+
+if [[ ${#password} -lt 8 || ! "$password" =~ [a-z] || ! "$password" =~ [A-Z] || ! "$password" =~ [0-9] ]]; >    echo "Password minimal 8 karakter, 1 huruf kecil, 1 huruf besar, dan 1 angka"
+ echo "Password minimal 8 karakter, 1 huruf kecil, 1 huruf besar, dan 1 angka"
+ exit 1
+fi
+
+echo "$email,$username,$password" >> "$path"
+echo "Registrasi berhasil"
+exit 0
+```
+
+
+2d.
+isi file register.sh:
+```bash
+#!/bin/bash
+
+path="./data/player.csv"
+
+mkdir -p data
+touch "$path"
+
+email=$1
+username=$2
+password=$3
+
+if ! [[ "$email" =~ ^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$ ]]; then
+ echo "Format email invalid"
+ exit 1
+fi
+
+if grep -q "^$email," "$path"; then
+ echo "Email sudah terdaftar"
+ exit 1
+fi
+
+if [[ ${#password} -lt 8 || ! "$password" =~ [a-z] || ! "$password" =~ [A-Z] || ! "$password" =~ [0-9] ]]; >    echo "Password minimal 8 karakter, 1 huruf kecil, 1 huruf besar, dan 1 angka"
+ echo "Password minimal 8 karakter, 1 huruf kecil, 1 huruf besar, dan 1 angka"
+ exit 1
+fi
+
+hashed_password=$(echo "$password" | sha256sum | awk '{print $1}')
+
+echo "$email,$username,$hashed_password" >> "$path"
+echo "Registrasi berhasil"
+exit 0
+```
+
+isi file login.sh:
+```bash
+#!/bin/bash
+
+path="./data/player.csv"
+
+mkdir -p data
+touch "$path"
+
+email=$1
+password=$2
+
+hashed_password=$(echo "$password" | sha256sum | awk '{print $1}')
+
+if grep -q "^$email,.*,$hashed_password$" "$path"; then
+ echo "Berhasil login"
+ exit 0
+else
+ echo "Gagal login"
+ exit 1
+fi
+```
 # Soal 3
 # Soal 4
 
