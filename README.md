@@ -7,7 +7,7 @@ Download file reading_data.csv menggunakan command:
 ```bash
 wget "https://drive.usercontent.google.com/u/0/uc?id=1l8fsj5LZLwXBlHaqhfJVjz_T0p7EJjqV&export=download" -O reading_data.csv
 ```
-
+a. Mencari jumlah buku yang dibaca Chris Hemsworth:
 ```bash
 awk -F ',' '
 { count[$2]++ } 
@@ -19,6 +19,10 @@ END {
     }
 }' reading_data.csv
 ```
+Penjelasan command:
+Command AWK ini digunakan untuk menghitung jumlah buku yang dibaca oleh Chris Hemsworth menggunakan pemisah(delimiter) berupa koma(,) (-F ','), Menghitung jumlah munculnya Chris Hemsworth pada kolom ke-2 (count[$2]++), dan if-statement jika Chris hemsworth membaca buku atau tidak.
+
+Output:
 ![Capture](https://github.com/user-attachments/assets/74f3bde2-caa2-47a7-8f32-ef6d1f266dae)
 ![Capture1](https://github.com/user-attachments/assets/62afa596-c657-4707-8a01-39b19b861c19)
 ![Capture2](https://github.com/user-attachments/assets/0db3f4d4-f121-40ed-95a5-4e646e68e9eb)
