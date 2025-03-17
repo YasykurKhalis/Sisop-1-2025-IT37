@@ -272,5 +272,113 @@ else
 fi
 ```
 # Soal 3
+Mengambil data dari API dan memperoleh JSON dari API yang digunakan di _Speak to Me_
+
+ ```
+sudo apt install curl jq -y
+```
+Membuat File bernama dsotm.sh dengan command berikut
+```
+nano dsotm.sh
+```
+Membersihkan terminal
+```
+clear
+```
+
+```
+speak_to_me() {
+    while true; do
+        curl -s https://www.affirmations.dev | jq -r '.affirmation'
+        sleep 1
+    done
+}
+```
+Penjelasan:
+Curl berfungsi untuk mengambil _word of affirmation_ dari api, sedangkan jq memastikan agar hanya _word of affirmation_ saja yang ditampilkan. Sedangkan While True berfungsi untuk looping setiap (sleep 1)
+
+Menampilkan progress bar dengan panjang tetap dan sleep acak antara 0.1 - 1 detik
+```
+on_the_run() {
+    local progress=0
+    local bar_length=50
+    while [ $progress -le 100 ]; do
+        sleep $(awk -v min=0.1 -v max=1 'BEGIN{srand(); print min+rand()*(max-min)}')
+        local filled=$((progress * bar_length / 100))
+        printf "\r[%-${bar_length}s] %d%%" $(head -c $filled < /dev/zero | tr '\0' '#') $progress
+        ((progress += RANDOM % 10 + 5))
+    done
+    echo "\nSelesai!"
+}
+```
+Menampilkan waktu _real-time_ yang di update setiap detik sekaligus membersihkan terminal setiap kali di update
+```
+time_display() {
+    while true; do
+        clear
+        date "+%Y-%m-%d %H:%M:%S"
+        sleep 1
+    done
+}
+```
+
+Menampilkan simbol uang seperti _cmatrix_
+```
+money_matrix() {
+    symbols=("$" "€" "£" "¥" "¢" "₹" "₩" "₿" "₣")
+    while true; do
+        printf "\e[2J"
+        for _ in $(seq 1 20); do
+            line=""
+            for _ in $(seq 1 40); do
+                line+="${symbols[RANDOM % ${#symbols[@]}]} "
+            done
+            echo "$line"
+        done
+        sleep 0.1
+    done
+}
+```
+Menampilkan _list process_ yang sedang berjalan dan diurutkan bedasarkan _CPU Usage_
+```
+brain_damage() {
+    while true; do
+        clear
+        ps -eo pid,comm,%cpu,%mem --sort=-%cpu | head -10
+        sleep 1
+    done
+}
+```
+```
+display_help() {
+    echo "Penggunaan: ./dsotm.sh --play=\"<Track>\""
+    echo "Pilihan Track:"
+    echo "  Speak to Me    - Kata-kata afirmasi"
+    echo "  On the Run     - Progress bar"
+    echo "  Time          - Jam real-time"
+    echo "  Brain Damage  - Task manager sederhana"
+    echo "  Money         - Animasi simbol mata uang"
+}
+```
+Penjelasan:
+Display Help berfungsi untuk memberikan panduan kepada pengguna, sekaligus memberikan daftar track yang bisa diputar
+
+```
+if [[ "$1" == "--play="* ]]; then
+    track=${1#--play=}
+    case "$track" in
+        "Speak to Me") speak_to_me ;; 
+        "On the Run") on_the_run ;; 
+        "Time") time_display ;; 
+        "Brain Damage") brain_damage ;; 
+        "Money") money_matrix ;; 
+        *) echo "Track tidak dikenali!"; display_help;;
+    esac
+else
+    display_help
+fi
+```
+Penjelasan:
+Untuk memastikan bahwa pengguna memasukkan input yang benar, dan akan memanggil display help jika pengguna salah memasukkan input
 # Soal 4
 
