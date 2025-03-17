@@ -95,6 +95,10 @@ Output:
 
 ![Capture3](https://github.com/user-attachments/assets/9d527364-3108-4eea-9234-805c76442a82)
 # Soal 2
+a. Buat file register.sh dan login.sh lalu ganti izin akses agar file bisa dieksekusi:
+```bash
+touch register.sh && touch login.sh && chmod +x register.sh && chmod +x login.sh
+```
 # Soal 3
 # Soal 4
 
