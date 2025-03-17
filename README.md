@@ -4,7 +4,10 @@
 3. Yasykur Khalis Jati Maulana Yuwono (NRP : 5027241112)
 # Soal 1
 Download file reading_data.csv menggunakan command:
+```bash
 wget "https://drive.usercontent.google.com/u/0/uc?id=1l8fsj5LZLwXBlHaqhfJVjz_T0p7EJjqV&export=download" -O reading_data.csv
+```
+
 ```bash
 awk -F ',' '
 { count[$2]++ } 
