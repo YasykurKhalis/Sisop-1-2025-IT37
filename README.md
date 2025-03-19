@@ -382,15 +382,15 @@ Penjelasan:
 Untuk memastikan bahwa pengguna memasukkan input yang benar, dan akan memanggil display help jika pengguna salah memasukkan input
 # Soal 4
 Download file pokemon_usage.csv dengan menggunakan command :
-'''bash
+```bash
 wget "https://drive.usercontent.google.com/u/0/uc?id=1n-2n_ZOTMleqa8qZ2nB8ALAbGFyN4-LJ&export=download" -O pokemon_usage.csv
-'''bash 
+```
 Membuat script pokemon_analysis.sh dengan menggunakan command :
-'''bash
+```bash
 nano pokemon_analysis.sh
-'''bash
+```
 A. Melihat summary dari data
-'''bash
+```bash
 if [[ "$2" == "--info" || "$2" == "-i" ]]
 then
   echo " "
@@ -399,13 +399,13 @@ then
   HighestRawUsage=$(awk -F, 'NR>1 {print $1, $3}' $1 | sort -k3 -nr | head -n 1)
   echo "Highest Adjusted Usage: $HighestUsage"
   echo "Highest Raw Usage: $HighestRawUsage"
-'''bash
+```
 Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan dijalan kode selanjutnya yaitu AWK untuk mengambil kolom 1 dan 2 yg berisi nama Pokemon dan juga Usage%, kemudian hasilnya di pipe untuk di sortir berdasarkan Usage% tertinggi, dna terakhir, akan diambil hasil yg paling atas. AWK diatas menggunakan "," sebagai pemisah kolom dan diberikan "NR>1" agar baris ke-1 alias baris yg berisi Nama Pokemon, Usage% , dsb tidak ikut kesortir. Kemudian hasil dari kode ini akan dimasukkan ke dalam variabel yang sudah dibuat, kemudian hasilnya pun akan di echo.
 
 B. Mengurutkan Pokemon berdasarkan data kolom
-'''bash
+```bash
 elif [[ "$2" == "--sort" || "$2" == "-s" ]]
 then
   if [ -z "$3" ]
@@ -437,13 +437,13 @@ then
   else
     awk -F, 'NR>1' $1 | sort -t, -k$sortfield -nr
   fi
-'''bash
+```
 Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan dijalan kode selanjutnya yaitu switch case sebagai pilihan yang nantinya pilihan yang sesuai akan mencari berdasarkan kolom yang sesuai juga. Disini jika argumen ke-2 tidak sesuai makan akan menampilkan error. Disini ada variabel field sebagai argumen ke-3 yang menjadi penentu berdasarkan apa sortir yang dilakukan. Pada fungsi ini juga menggunakan AWK yang kurang lebih awalnya sama dengan yang awal, kemudian hasilnya akan di sortir secara _**descending**_ untuk semua angka dan secara _**alphabetical**_ untuk nama. 
 
 C. Mencari nama Pokemon tertentu
-'''bash
+```bash
 # Mencari Nama Pokemon
 elif [[ "$2" == "--grep" || "$2" == "-g" ]]
 then
@@ -461,13 +461,13 @@ then
   else
     echo "Name not found"
   fi
-'''bash
+```
 Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan dijalan kode selanjutnya yaitu AWK untuk mencari nama Pokemon tanpa memperhatikan kapitalisasi dan hasilnya akan di pipe untuk mengecek apakah ada hasil yang sesuai, jika ditemukan maka akan di sortir persis sesuai dengan format csv. Jika nama tidak ditemukan maka akan menampilkan error dimana nama tidak ditemukan.
 
 D. Mencari Pokemon berdasarkan filter nama type
-'''bash
+```bash
 # Mencari Nama Pokemon Berdasarkan Filter
 elif [[ "$2" == "--filter" || "$2" == "-f" ]]
 then
@@ -487,7 +487,7 @@ then
   else
     echo "Type not found"
   fi
-'''bash
+```
 Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan dijalan kode selanjutnya yaitu AWK untuk mencari nama Pokemon berdasarkan filter yang diinginkan sehingga di kode nya mencari di kolom ke-4 dan juga ke-5. Kode ini kurang lebih sama dengan kode diatas. Jika type tidak ditemukan maka akan menampilkan type tidak ditemukan.
@@ -497,7 +497,7 @@ E. Error Handling
 Untuk error handling sudah dimasukkan di kode-kode diatas yaitu fungsi else akan menampilkan error, dan jika flagnya yang tidak sesuai maka fungsi help akan otomatis berjalan
 
 F. Help screen yang menarik
-'''bash
+```bash
 # Help
 elif [[ "$1" == "-h" || "$1" == "--help" || "$2" == "-h" || "$2" == "--help" ]]
 then
@@ -542,7 +542,7 @@ then
   echo  "-----------------------------------------------------------------------------------------"
   exit 0
 fi
-'''bash
+```
 Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan ditampilkan messages screen ini. Flag yg salah juga akan menampilkan help screen ini. Pada help screen ini juga ditampilkan banyak info mengenai format command dan juga command-command yang tersedia bagi pengguna. Agar lebih menarik pada help screen ini terdapat tulisan Pokemon.
