@@ -176,6 +176,10 @@ echo "$email,$username,$password" >> "$path"
 echo "Registrasi berhasil"
 exit 0
 ```
+Penjelasan:
+
+Menambahkan if-statement untuk mengecek apakah format email sudah benar. Jika belum maka akan meng-echo "Format email invalid" dan keluar dari script (exit 1)
+
 c. Menjadikan sistem register agar tidak menambahkan email yang sudah ada pada data:
 
 isi file register.sh:
@@ -211,6 +215,10 @@ echo "$email,$username,$password" >> "$path"
 echo "Registrasi berhasil"
 exit 0
 ```
+Penjelasan:
+
+Menambahkan if-statement untuk meng-grep format email apakah sudah ada pada file player.csv atau belum.
+
 d. Meng-hash password agar tidak gampang dilihat:
 
 isi file register.sh:
@@ -228,26 +236,30 @@ read -s -p "Masukkan password: " password
 echo
 
 if ! [[ "$email" =~ ^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$ ]]; then
- echo "Format email invalid"
- exit 1
+    echo "Format email invalid"
+    exit 1
 fi
 
 if grep -q "^$email," "$path"; then
- echo "Email sudah terdaftar"
- exit 1
+    echo "Email sudah terdaftar"
+    exit 1
 fi
 
-if [[ ${#password} -lt 8 || ! "$password" =~ [a-z] || ! "$password" =~ [A-Z] || ! "$password" =~ [0-9] ]]; >    echo "Password minimal 8 karakter, 1 huruf kecil, 1 huruf besar, dan 1 angka"
- echo "Password minimal 8 karakter, 1 huruf kecil, 1 huruf besar, dan 1 angka"
- exit 1
+if [[ ${#password} -lt 8 || ! "$password" =~ [a-z] || ! "$password" =~ [A-Z] || ! "$password" =~ [0-9] ]]; then
+    echo "Password minimal 8 karakter, 1 huruf kecil, 1 huruf besar, dan 1 angka"
+    exit 1
 fi
 
-hashed_password=$(echo "$password" | sha256sum | awk '{print $1}')
+salt="s1s0pG4c0r"
+hashed_password=$(echo "$salt$password" | sha256sum | awk '{print $1}')
 
 echo "$email,$username,$hashed_password" >> "$path"
 echo "Registrasi berhasil"
 exit 0
 ```
+Penjelasan:
+
+Meng-hash password agar tidak mudah diketahui dengan algoritma hashing sha256sum dan static salt "s1s0pG4c0r".
 
 isi file login.sh:
 ```bash
@@ -261,7 +273,8 @@ touch "$path"
 read -p "Masukkan email: " email
 read -s -p "Masukkan password: " password
 
-hashed_password=$(echo "$password" | sha256sum | awk '{print $1}')
+salt="s1s0pG4c0r"
+hashed_password=$(echo "$salt$password" | sha256sum | awk '{print $1}')
 
 if grep -q "^$email,.*,$hashed_password$" "$path"; then
  echo "Berhasil login"
@@ -271,6 +284,164 @@ else
  exit 1
 fi
 ```
+Penjelasan:
+
+Menyesuaikan input password dengan algoritma hash dan salt yang sama dengan register agar bisa dicocokkan.
+
+e. Membuat file yang bisa membaca persentase penggunaan CPU dan modelnya di directory scripts:
+```bash
+mkdir scripts && touch /scripts/core_monitor.sh && chmod +x /scripts/core_monitor.sh
+```
+isi file core_monitor.sh:
+```bash
+#!/bin/bash
+
+cpu_usage=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
+
+cpu_model=$(lscpu | grep "Model name" | cut -d ':' -f 2 | xargs)
+
+log_dir="$(dirname "$0")/../log"
+log_file="$log_dir/core.log"
+
+mkdir -p "$log_dir"
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] - Core Usage [$cpu_usage%] - Terminal Model [$cpu_model]" >> $log_file
+```
+Penjelasan:
+
+script menghitung persentase penggunaan CPU dengan mengambil nilai idle dari perintah top, mengolahnya dengan sed dan awk, lalu menguranginya dari 100%. Kemudian, script mendapatkan model CPU dari output lscpu. Selanjutnya, script menentukan lokasi log file (../log/core.log), membuat direktori jika belum ada, dan mencatat informasi penggunaan CPU (Core) dalam format waktu - penggunaan CPU - Model CPU ke dalam log file.
+
+f. Membuat file yang bisa membaca persentase penggunaan RAM dan modelnya di directory scripts:
+```bash
+touch /scripts/core_monitor.sh && chmod +x /scripts/core_monitor.sh
+```
+isi file frag_monitor.sh:
+```bash
+#!/bin/bash
+
+ram_usage=$(free | grep Mem | awk '{print $3/$2 * 100.0}')
+
+total_ram=$(free -h | grep Mem | awk '{print $2}')
+available_ram=$(free -h | grep Mem | awk '{print $7}')
+
+log_dir="$(dirname "$0")/../log"
+log_file="$log_dir/fragment.log"
+
+mkdir -p "$log_dir"
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] - Fragment Usage [$ram_usage%] - Fragment Count [$total_ram] - Details [Total: $total_ram, Available: $available_ram]" >> $log_file
+```
+Penjelasan:
+
+Menghitung persentase penggunaan RAM dengan mengambil nilai total dan penggunaan memori (free), lalu mengolahnya dengan awk. Kemudian, script mendapatkan total RAM dan RAM yang tersedia dalam format yang lebih mudah dibaca (-h untuk human-readable). Setelah itu, script menentukan lokasi log file (../log/fragment.log), membuat direktori jika belum ada, dan mencatat informasi dalam format waktu - persentase penggunaan RAM - jumlah penggunaan RAM (dalam MB)  - detail ke dalam log file.
+
+g. Membuat file manager.sh untuk mengatur jadwal pemantauan sistem di dalam directory scripts:
+```bash
+touch scripts/manager.sh && chmod +x scripts/manager.sh
+```
+isi file manager.sh:
+```bash
+#!/bin/bash
+
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+LOG_DIR="$SCRIPT_DIR/../log"
+mkdir -p "$LOG_DIR"
+
+while true; do
+    # Menu utama
+    echo "========================"
+    echo "1. Add CPU Monitoring"
+    echo "2. Remove CPU Monitoring"
+    echo "3. Add RAM Monitoring"
+    echo "4. Remove RAM Monitoring"
+    echo "5. View Active Jobs"
+    echo "6. Exit"
+    read -p "Choose an option: " choice
+    echo "========================"
+
+    case $choice in
+        1)
+            if crontab -l 2>/dev/null | grep -q "core_monitor.sh"; then
+                echo "CPU monitoring is already active."
+            else
+                (crontab -l 2>/dev/null | grep -v "core_monitor.sh"; echo "* * * * * $SCRIPT_DIR/core_monitor.sh >> $LOG_DIR/core.log") | crontab -
+                echo "CPU monitoring added."
+            fi
+            ;;
+        2)
+            crontab -l | grep -v "core_monitor.sh" | crontab -
+            echo "CPU monitoring removed."
+            ;;
+        3)
+            if crontab -l 2>/dev/null | grep -q "frag_monitor.sh"; then
+                echo "RAM monitoring is already active."
+            else
+                (crontab -l 2>/dev/null | grep -v "frag_monitor.sh"; echo "* * * * * $SCRIPT_DIR/frag_monitor.sh >> $LOG_DIR/fragment.log") | crontab -
+                echo "RAM monitoring added."
+            fi
+            ;;
+        4)
+            crontab -l | grep -v "frag_monitor.sh" | crontab -
+            echo "RAM monitoring removed."
+            ;;
+        5)
+            echo "Active CPU and RAM Monitoring Jobs:"
+            crontab -l | grep -E "core_monitor.sh|frag_monitor.sh" || echo "No active monitoring jobs found."
+            ;;
+        6)
+            exit 0
+            ;;
+        *)
+            echo "Invalid option."
+            ;;
+    esac
+done
+```
+Penjelasan:
+
+Pertama, script ini memastikan bahwa directory log sudah ada jika belum maka akan membuat directory log untuk diisi hasil dari eksekusi file core_monitor.sh dan frag_monitor.sh. Lalu menampilkan pilihan untuk menambahkan (1 & 3) dan menghapus (2 & 4) pengaturan jadwal pemantauan sistem serta melihat pemantauan sistem yang aktif (5) dalam cronjob setiap menit (* * * * *).
+
+h. Membuat 2 log file yaitu core_log untuk penggunaan CPU dan fragment_log untuk penggunaan RAM di dalam directory log:
+
+Untuk soal ini sudah kami terapkan pada soal-soal sebelumnya (e-g).
+
+i. Membuat file terminal.sh untuk antarmuka utama yang menggabungkan semua komponen:
+```bash
+touch terminal.sh
+```
+isi terminal.sh:
+```bash
+#!/bin/bash
+
+while true; do
+    echo "1. Register"
+    echo "2. Login"
+    echo "3. Exit"
+    read -p "Choose an option: " choice
+
+    case $choice in
+        1)
+            ./register.sh
+            ;;
+        2)
+            ./login.sh
+            if [ $? -eq 0 ]; then
+                ./scripts/manager.sh
+            fi
+            ;;
+        3)
+            exit 0
+            ;;
+        *)
+            echo "Invalid option."
+            ;;
+    esac
+done
+```
+Penjelasan:
+
+Isi dari script adalah perintah yang berisikan pilihan untuk register dan login. Jika user berhasil login maka ia akan mengeksekusi file manager.sh dan mendapatkan akses untuk mengatur sistem.
+
 # Soal 3
 Mengambil data dari API dan memperoleh JSON dari API yang digunakan di _Speak to Me_
 
