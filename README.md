@@ -333,7 +333,7 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')] - Fragment Usage [$ram_usage%] - Fragment C
 ```
 Penjelasan:
 
-Menghitung persentase penggunaan RAM dengan mengambil nilai total dan penggunaan memori (free), lalu mengolahnya dengan awk. Kemudian, script mendapatkan total RAM dan RAM yang tersedia dalam format yang lebih mudah dibaca (-h untuk human-readable). Setelah itu, script menentukan lokasi log file (../log/fragment.log), membuat direktori jika belum ada, dan mencatat informasi dalam format waktu - persentase penggunaan RAM - jumlah penggunaan RAM (dalam MB)  - detail ke dalam log file.
+Menghitung persentase penggunaan RAM dengan mengambil nilai total dan penggunaan memori (free), lalu mengolahnya dengan awk. Kemudian, script mendapatkan total RAM dan RAM yang tersedia dalam format yang lebih mudah dibaca (-h untuk human-readable). Setelah itu, script menentukan lokasi log file (../log/fragment.log), membuat direktori jika belum ada, dan mencatat informasi dalam format waktu - persentase penggunaan RAM - jumlah penggunaan RAM - detail ke dalam log file.
 
 g. Membuat file manager.sh untuk mengatur jadwal pemantauan sistem di dalam directory scripts:
 ```bash
@@ -399,7 +399,7 @@ done
 ```
 Penjelasan:
 
-Pertama, script ini memastikan bahwa directory log sudah ada jika belum maka akan membuat directory log untuk diisi hasil dari eksekusi file core_monitor.sh dan frag_monitor.sh. Lalu menampilkan pilihan untuk menambahkan (1 & 3) dan menghapus (2 & 4) pengaturan jadwal pemantauan sistem serta melihat pemantauan sistem yang aktif (5) dalam cronjob setiap menit (* * * * *).
+Di soal ini, saat demo dilakukan, opsi 1 dan 3 belum bisa berjalan dengan baik dan opsi 5 juga tidak menampilkan hasil yang diinginkan maka kami melakukan sedikit revisi pada bagian tersebut. Pertama, script ini memastikan bahwa directory log sudah ada jika belum maka akan membuat directory log untuk diisi hasil dari eksekusi file core_monitor.sh dan frag_monitor.sh. Lalu menampilkan pilihan untuk menambahkan (1 & 3) dan menghapus (2 & 4) pengaturan jadwal pemantauan sistem serta melihat pemantauan sistem yang aktif (5) dalam cronjob. Ketika ditambahkan script ini akan menjalankan script core_monitor.sh dan frag_monitor.sh dalam waktu yang ditentukan.
 
 h. Membuat 2 log file yaitu core_log untuk penggunaan CPU dan fragment_log untuk penggunaan RAM di dalam directory log:
 
@@ -441,6 +441,32 @@ done
 Penjelasan:
 
 Isi dari script adalah perintah yang berisikan pilihan untuk register dan login. Jika user berhasil login maka ia akan mengeksekusi file manager.sh dan mendapatkan akses untuk mengatur sistem.
+
+Output soal 2:
+
+terminal.sh:
+
+![Capture5](https://github.com/user-attachments/assets/e3b80139-5a56-401b-b4a8-7039e809cb8b)
+
+manager.sh
+
+![Capture6](https://github.com/user-attachments/assets/cacf5433-b78e-48db-b1d3-f078a612f432)
+
+Opsi 5 (View Active Jobs) pada manager.sh:
+
+![Capture7](https://github.com/user-attachments/assets/54daa58a-23a4-4201-931a-2648cf3869b0)
+
+core.log:
+
+![Capture8](https://github.com/user-attachments/assets/c42e983d-721a-40ec-bbf1-6d933029555c)
+
+fragment.log:
+
+![Capture9](https://github.com/user-attachments/assets/05af46c5-ac45-4e51-bd85-a7a042bbef3c)
+
+player.csv:
+
+![Capture10](https://github.com/user-attachments/assets/d767cfee-e8b4-4945-8fb1-ac82d5973701)
 
 # Soal 3
 Mengambil data dari API dan memperoleh JSON dari API yang digunakan di _Speak to Me_
