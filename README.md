@@ -404,6 +404,9 @@ Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan dijalan kode selanjutnya yaitu AWK untuk mengambil kolom 1 dan 2 yg berisi nama Pokemon dan juga Usage%, kemudian hasilnya di pipe untuk di sortir berdasarkan Usage% tertinggi, dna terakhir, akan diambil hasil yg paling atas. AWK diatas menggunakan "," sebagai pemisah kolom dan diberikan "NR>1" agar baris ke-1 alias baris yg berisi Nama Pokemon, Usage% , dsb tidak ikut kesortir. Kemudian hasil dari kode ini akan dimasukkan ke dalam variabel yang sudah dibuat, kemudian hasilnya pun akan di echo.
 
+Output :
+![image](https://github.com/user-attachments/assets/85b87d22-bcdb-473d-908b-f5e116ae0cf0)
+
 B. Mengurutkan Pokemon berdasarkan data kolom
 ```bash
 elif [[ "$2" == "--sort" || "$2" == "-s" ]]
@@ -442,6 +445,10 @@ Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan dijalan kode selanjutnya yaitu switch case sebagai pilihan yang nantinya pilihan yang sesuai akan mencari berdasarkan kolom yang sesuai juga. Disini jika argumen ke-2 tidak sesuai makan akan menampilkan error. Disini ada variabel field sebagai argumen ke-3 yang menjadi penentu berdasarkan apa sortir yang dilakukan. Pada fungsi ini juga menggunakan AWK yang kurang lebih awalnya sama dengan yang awal, kemudian hasilnya akan di sortir secara _**descending**_ untuk semua angka dan secara _**alphabetical**_ untuk nama. 
 
+Output : ( Sort Name )
+![image](https://github.com/user-attachments/assets/8fa64961-8e61-45ba-86db-471a47a47317)
+
+
 C. Mencari nama Pokemon tertentu
 ```bash
 # Mencari Nama Pokemon
@@ -465,6 +472,10 @@ then
 Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan dijalan kode selanjutnya yaitu AWK untuk mencari nama Pokemon tanpa memperhatikan kapitalisasi dan hasilnya akan di pipe untuk mengecek apakah ada hasil yang sesuai, jika ditemukan maka akan di sortir persis sesuai dengan format csv. Jika nama tidak ditemukan maka akan menampilkan error dimana nama tidak ditemukan.
+
+Output :
+![image](https://github.com/user-attachments/assets/fb055c7b-10e0-429d-95d0-9c035da5e252)
+
 
 D. Mencari Pokemon berdasarkan filter nama type
 ```bash
@@ -491,6 +502,10 @@ then
 Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan dijalan kode selanjutnya yaitu AWK untuk mencari nama Pokemon berdasarkan filter yang diinginkan sehingga di kode nya mencari di kolom ke-4 dan juga ke-5. Kode ini kurang lebih sama dengan kode diatas. Jika type tidak ditemukan maka akan menampilkan type tidak ditemukan.
+
+Output : ( Filter Dark )
+![image](https://github.com/user-attachments/assets/857885fa-860f-411c-bd48-3d7968a1f195)
+
 
 E. Error Handling
 
@@ -546,3 +561,7 @@ fi
 Penjelasan :
 
 Kode ini mengecek apakah argumen ke-2 sesuai, dan jika sesuai maka akan ditampilkan messages screen ini. Flag yg salah juga akan menampilkan help screen ini. Pada help screen ini juga ditampilkan banyak info mengenai format command dan juga command-command yang tersedia bagi pengguna. Agar lebih menarik pada help screen ini terdapat tulisan Pokemon.
+
+Output :
+![image](https://github.com/user-attachments/assets/44605cbd-d483-4118-b3d7-2ec96d6a4269)
+
