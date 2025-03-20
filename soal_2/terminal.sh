@@ -9,6 +9,9 @@ while true; do
     case $choice in
         1)
             ./register.sh
+            if [ $? -eq 0 ]; then
+                ./scripts/manager.sh
+            fi
             ;;
         2)
             ./login.sh
